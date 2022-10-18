@@ -37,4 +37,6 @@ public class MyConfiguration implements CamelConfiguration {
 //        cf.setPassword("admin");
 //        return cf;
 //    }
+
+
 }

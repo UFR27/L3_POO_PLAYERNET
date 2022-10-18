@@ -1,24 +1,39 @@
 package fr.pantheonsorbonne.miage;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Collection;
 
 public interface PlayerFacade {
 
-    List<Partner> getAvailablePartners();
+    void joinLobby(String playerName);
 
-    void createGame(String gameName);
+    void leaveLobby();
 
-    Partner waitForPartner(long delay, TimeUnit unit);
+    void sendLobbyMessage(String text);
 
-    void joinGame(Partner p);
+    Collection<String> receiveLobbyMessages();
 
-    void leaveGame(Partner p);
+    Collection<String> receiveLobbyStatus();
 
-    void send(String str);
+    Collection<Game> getAvailableGamesInLobby();
 
-    String receive();
+    Game createNewGameInLobby(String gameName);
+
+    void startGame(Game game);
+
+    void leaveGame(Game game);
+
+    void joinGame(Game game);
+
+    void sendGameCommand(Game game, String command);
+
+    Collection<String> receiveGameCommands(Game game);
 
 
+    boolean isReady();
 
+    void waitReady();
+
+    void waitGameStart(Game game);
+
+    int getPlayerCount();
 }

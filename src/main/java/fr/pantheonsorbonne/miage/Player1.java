@@ -16,21 +16,35 @@
  */
 package fr.pantheonsorbonne.miage;
 
-import org.apache.camel.main.Main;
+import java.util.Random;
 
 /**
  * Main class that boot the Camel application
  */
-public final class MyApplication {
+public final class Player1 {
 
-    private MyApplication() {
+    private Player1() {
     }
 
     public static void main(String[] args) throws Exception {
-        // use Camels Main class
-        Main main = new Main(MyApplication.class);
-        // now keep the application running until the JVM is terminated (ctrl + c or sigterm)
-        main.run(args);
+        PlayerFacade facade = PlayerFacadeImpl.getInstance();
+        facade.waitReady();
+
+        facade.joinLobby("Nicolas" + new Random().nextInt());
+        facade.sendLobbyMessage("who wants to play?");
+        Game game = facade.createNewGameInLobby("chifoumi");
+        while (facade.getPlayerCount() == 1) {
+            Thread.sleep(1000);
+            System.out.println("no player yet");
+        }
+        System.out.println("a new player has arrived");
+        facade.startGame(game);
+        facade.waitGameStart(game);
+        facade.sendGameCommand(game, "salut");
+        facade.sendGameCommand(game, "nounou");
+        facade.sendGameCommand(game, "endGame");
+
+
     }
 
 }

@@ -14,16 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.pantheonsorbonne.miage;
+package fr.pantheonsorbonne.miage.camel;
 
-import org.apache.camel.CamelConfiguration;
 import org.apache.camel.Configuration;
 
 /**
  * Class to configure the Camel application.
  */
 @Configuration
-public class MyConfiguration implements CamelConfiguration {
+public class CamelConfiguration implements org.apache.camel.CamelConfiguration {
 
     /**
      * Creates the Artemis JMS ConnectionFactory and bind it to the Camel registry

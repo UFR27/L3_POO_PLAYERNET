@@ -1,13 +1,13 @@
-package fr.pantheonsorbonne.miage;
+package fr.pantheonsorbonne.miage.model;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 public final class Game {
-    private  String gameId;
-    private  String gameName;
-    private  String playerName;
+    private String gameId;
+    private String gameName;
+    private String playerName;
     private Set<String> players;
     private GameState state;
 
@@ -43,6 +43,11 @@ public final class Game {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(gameId, gameName, playerName, players, state);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
@@ -55,11 +60,6 @@ public final class Game {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(gameId, gameName, playerName, players, state);
-    }
-
-    @Override
     public String toString() {
         return "Game[" +
                 "gameId=" + gameId + ", " +
@@ -67,10 +67,6 @@ public final class Game {
                 "playerName=" + playerName + ", " +
                 "players=" + players + ", " +
                 "state=" + state + ']';
-    }
-
-    public void setState(GameState state) {
-        this.state = state;
     }
 
     public String getGameId() {
@@ -107,6 +103,10 @@ public final class Game {
 
     public GameState getState() {
         return state;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
     }
 
     public enum GameState {

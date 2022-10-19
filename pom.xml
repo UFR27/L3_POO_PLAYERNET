@@ -17,7 +17,7 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -48,6 +48,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.8.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -136,6 +144,11 @@
             <artifactId>camel-jackson</artifactId>
             <version>3.19.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>
@@ -148,7 +161,7 @@
                 <version>3.19.0</version>
                 <configuration>
                     <logClasspath>false</logClasspath>
-                    <mainClass>fr.pantheonsorbonne.miage.Player1</mainClass>
+                    <mainClass>fr.pantheonsorbonne.miage.game.ChifoumiHost</mainClass>
                 </configuration>
             </plugin>
         </plugins>

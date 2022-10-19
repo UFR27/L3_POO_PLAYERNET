@@ -1,5 +1,7 @@
 package fr.pantheonsorbonne.miage;
 
+import fr.pantheonsorbonne.miage.model.Game;
+import fr.pantheonsorbonne.miage.model.GameCommand;
 import org.apache.camel.Body;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.ExchangeBuilder;
@@ -11,10 +13,11 @@ import java.util.*;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
-public class PlayerFacadeImpl extends Main implements PlayerFacade {
+public class PlayerFacadeImpl extends Main implements PlayerFacadePlumbing, PlayerFacadePorcelain {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PlayerFacadeImpl.class);
 
@@ -25,9 +28,8 @@ public class PlayerFacadeImpl extends Main implements PlayerFacade {
         try {
             new Thread(() -> {
                 try {
-
-
                     PLAYER_FACADE.run();
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -48,18 +50,21 @@ public class PlayerFacadeImpl extends Main implements PlayerFacade {
     BlockingDeque<String> lobbyStatus = new LinkedBlockingDeque<>();
     BlockingDeque<String> gameCommands = new LinkedBlockingDeque<>();
     ConcurrentHashMap<String, Game> lobbyGame = new ConcurrentHashMap<>();
-
     private String playerName;
     private Game currentGame;
 
     private PlayerFacadeImpl() {
-        super(PlayerFacadeImpl.class);
+        super(PlayerFacadePorcelain.class);
     }
 
-    public static PlayerFacadeImpl getInstance() {
+    public static PlayerFacadeImpl getSingleton() {
 
         return PLAYER_FACADE;
 
+    }
+
+    public String getPlayerName() {
+        return playerName;
     }
 
     @Override
@@ -67,14 +72,6 @@ public class PlayerFacadeImpl extends Main implements PlayerFacade {
         super.afterStart();
 
 
-    }
-
-    @Override
-    public void joinLobby(String playerName) {
-        LOGGER.debug("join lobby");
-        this.playerName = playerName;
-        this.sendLobbyStatus(playerName + " joined the lobby");
-        LOGGER.debug("join lobby message sent");
     }
 
     @Override
@@ -118,42 +115,10 @@ public class PlayerFacadeImpl extends Main implements PlayerFacade {
     }
 
     @Override
-    public Game createNewGameInLobby(String gameName) {
-        LOGGER.debug("createNewGameInLobby");
-
-        if (this.getCurrentGame() != null) {
-            lobbyGame.remove(this.getCurrentGame());
-            this.leaveGame(this.getCurrentGame());
-        }
-
-        this.setCurrentGame(new Game(UUID.randomUUID().toString(), gameName, this.playerName, new HashSet<>(), Game.GameState.CREATED));
-        new Thread(() -> {
-            while (true) {
-                this.camelContext.createProducerTemplate().sendBody("direct:lobbyGame", this.getCurrentGame());
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-        return this.getCurrentGame();
-
-    }
-
-    public synchronized Game getCurrentGame() {
-        return currentGame;
-    }
-
-    public synchronized void setCurrentGame(Game currentGame) {
-        this.currentGame = currentGame;
-    }
-
-    @Override
     public void startGame(Game game) {
         if (this.getCurrentGame() != null && this.getCurrentGame().gameId().equals(game.gameId())) {
             this.getCurrentGame().setState(Game.GameState.STARTED);
+            this.camelContext.createProducerTemplate().sendBody("direct:lobbyGame", this.getCurrentGame());
 
         }
     }
@@ -171,13 +136,19 @@ public class PlayerFacadeImpl extends Main implements PlayerFacade {
     }
 
     @Override
-    public void sendGameCommand(Game game, String command) {
-        this.camelContext.createProducerTemplate().sendBodyAndHeaders("direct:gameCommands", command, Map.of("type", "gameReceiveCommands", "gameId", game.gameId()));
+    public void rawSendGameCommand(Game game, String command) {
+        this.camelContext.createProducerTemplate().sendBodyAndHeaders("direct:gameCommands", command, Map.of("type", "gameReceiveCommands", "gameId", game.gameId(), "sender", this.playerName));
     }
 
     @Override
-    public Collection<String> receiveGameCommands(Game game) {
-        return getAndPollQueue(this.gameCommands);
+    public String receiveRawGameCommand(Game game) {
+
+        try {
+            return this.gameCommands.pollFirst(10, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -186,18 +157,7 @@ public class PlayerFacadeImpl extends Main implements PlayerFacade {
     }
 
     @Override
-    public void waitReady() {
-        while (!this.isReady()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void waitGameStart(Game game) {
+    public void waitGameStarted(Game game) {
         while (!getCurrentGame().state().equals(Game.GameState.STARTED)) {
             try {
                 Thread.sleep(100);
@@ -212,12 +172,135 @@ public class PlayerFacadeImpl extends Main implements PlayerFacade {
         return this.getCurrentGame().players().size() + 1;
     }
 
+    @Override
+    public void waitReady() {
+        while (!this.isReady()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void createNewPlayer(String playerName) {
+        LOGGER.debug("join lobby");
+        this.playerName = playerName;
+        this.sendLobbyStatus(playerName + " joined the lobby");
+        LOGGER.debug("join lobby message sent");
+    }
+
+    @Override
+    public Game createNewGame(String gameName) {
+        LOGGER.debug("createNewGameInLobby");
+
+        if (this.getCurrentGame() != null) {
+            lobbyGame.remove(this.getCurrentGame());
+            this.leaveGame(this.getCurrentGame());
+        }
+
+        this.setCurrentGame(new Game(UUID.randomUUID().toString(), gameName, this.playerName, new HashSet<>(), Game.GameState.CREATED));
+        new Thread(() -> {
+            while (!this.getCurrentGame().state().equals(Game.GameState.STARTED)) {
+                this.camelContext.createProducerTemplate().sendBody("direct:lobbyGame", this.getCurrentGame());
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        return this.getCurrentGame();
+
+    }
+
+    @Override
+    public void waitForPlayerCount(int i) {
+        while (this.getPlayerCount() < i) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+        this.startGame(this.getCurrentGame());
+        this.waitGameStarted(this.getCurrentGame());
+
+    }
+
+    @Override
+    public GameCommand receiveGameCommand(Game game) {
+
+        String command = this.receiveRawGameCommand(game);
+        int nameIndex = command.indexOf(":");
+        String commandName = command.substring(0, nameIndex);
+        int paramIndex = command.indexOf("?");
+        Map<String, String> params = Collections.EMPTY_MAP;
+        String commandBody = "";
+        if (paramIndex != -1) {
+            params = new HashMap<>();
+            String paramsStr = commandName.substring(paramIndex, command.length());
+            for (String entry : paramsStr.split("&")) {
+                String[] kv = entry.split("=");
+                params.put(kv[0], kv[1]);
+            }
+            commandBody = command.substring(nameIndex, paramIndex);
+        } else {
+            commandBody = command.substring(nameIndex + 1);
+        }
+
+        return new GameCommand(commandName, commandBody, params);
+
+
+    }
+
+    @Override
+    public void sendGameCommand(Game game, GameCommand command) {
+        String params = command.params().entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining("&"));
+        if (params.isEmpty()) {
+            this.rawSendGameCommand(game, command.name() + ":" + command.body());
+        } else {
+            this.rawSendGameCommand(game, command.name() + ":" + command.body() + "?" + params);
+        }
+
+    }
+
+    @Override
+    public Game autoJoinGame(String gameName) {
+
+        waitingForGame:
+        while (true) {
+            for (Game game : this.getAvailableGamesInLobby()) {
+                if (game.gameName().equals(gameName)) {
+                    this.setCurrentGame(game);
+                    break waitingForGame;
+                }
+            }
+        }
+        this.joinGame(this.getCurrentGame());
+        this.waitGameStarted(this.getCurrentGame());
+        return this.getCurrentGame();
+
+    }
+
+    public synchronized Game getCurrentGame() {
+        return currentGame;
+    }
+
+    public synchronized void setCurrentGame(Game currentGame) {
+        this.currentGame = currentGame;
+    }
+
     public void sendLobbyStatus(String text) {
         LOGGER.debug("send lobby status: " + text);
         var exchange = ExchangeBuilder.anExchange(this.camelContext).withPattern(ExchangePattern.InOnly).withHeader("type", "lobbyStatus").withBody(text).build();
         this.camelContext.createProducerTemplate().send("direct:lobbyStatus?exchangePattern=InOnly&block=false", exchange);
         LOGGER.debug("send lobby status done");
     }
+
 
     public void onLobbyReceiveMessage(@Body String text) throws InterruptedException {
         lobbyText.offerLast(text);
@@ -249,7 +332,7 @@ public class PlayerFacadeImpl extends Main implements PlayerFacade {
     public void onGameCommandReceived(@Body String command) throws InterruptedException {
 
         gameCommands.offerLast(command);
-        LOGGER.error("received command " + command + " we have " + gameCommands.size() + " so far in " + gameCommands);
+        LOGGER.info("received command " + command );
     }
 
 

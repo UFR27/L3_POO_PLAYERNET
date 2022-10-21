@@ -34,6 +34,7 @@
 
     <packaging>jar</packaging>
     <name>Multiplayer game L3 POO</name>
+    <url>https://ufr27.github.io/L3_POO_PLAYERNET</url>
 <description>
     This project aims at providing L3 POO students facilities to implement a network game.
 

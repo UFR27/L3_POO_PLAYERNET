@@ -10,16 +10,13 @@
 
 
     <body>
-        <links>
-            <item name="EPI" href="https://cours.univ-paris1.fr/course/view.php?id=29083" />
-        </links>
 
         <menu name="MuNetGame">
-            <item name="configuration" href="configuration.html"></item>
+            <item name="Configuration" href="configuration.html"></item>
             <item name="Download" href="download.html"/>
             <item name="Usage Example" href="usage.html"/>
             <item name="Project Example" href="https://github.com/UFR27/L3_POO_TICTACTOE"></item>
-
+            <item name="EPI" href="https://cours.univ-paris1.fr/course/view.php?id=29083" />
         </menu>
 
         <menu ref="reports"/>

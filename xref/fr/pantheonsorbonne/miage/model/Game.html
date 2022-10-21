@@ -19,14 +19,14 @@
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="Game" href="../../../../fr/pantheonsorbonne/miage/model/Game.html#Game">Game</a> {
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>      <strong class="jxr_keyword">private</strong> String gameId;
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>      <strong class="jxr_keyword">private</strong> String gameName;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>      <strong class="jxr_keyword">private</strong> String playerName;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>      <strong class="jxr_keyword">private</strong> String hostName;
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>      <strong class="jxr_keyword">private</strong> Set&lt;String&gt; players;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>      <strong class="jxr_keyword">private</strong> GameState state;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>      <strong class="jxr_keyword">public</strong> <a name="Game" href="../../../../fr/pantheonsorbonne/miage/model/Game.html#Game">Game</a>(String gameId, String gameName, String playerName, HashSet&lt;String&gt; players, GameState state) {
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>      <strong class="jxr_keyword">public</strong> <a name="Game" href="../../../../fr/pantheonsorbonne/miage/model/Game.html#Game">Game</a>(String gameId, String gameName, String hostName, HashSet&lt;String&gt; players, GameState state) {
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>          <strong class="jxr_keyword">this</strong>.gameId = gameId;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>          <strong class="jxr_keyword">this</strong>.gameName = gameName;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>          <strong class="jxr_keyword">this</strong>.playerName = playerName;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>          <strong class="jxr_keyword">this</strong>.hostName = hostName;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>          <strong class="jxr_keyword">this</strong>.players = players;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>          <strong class="jxr_keyword">this</strong>.state = state;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>      }
@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      }
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">public</strong> String playerName() {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <strong class="jxr_keyword">return</strong> playerName;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <strong class="jxr_keyword">return</strong> hostName;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>      }
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">public</strong> Set&lt;String&gt; players() {
@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      @Override
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">return</strong> Objects.hash(gameId, gameName, playerName, players, state);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">return</strong> Objects.hash(gameId, gameName, hostName, players, state);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      }
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      @Override
@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">var</strong> that = (<a name="Game" href="../../../../fr/pantheonsorbonne/miage/model/Game.html#Game">Game</a>) obj;
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">return</strong> Objects.equals(<strong class="jxr_keyword">this</strong>.gameId, that.gameId) &amp;&amp;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>                  Objects.equals(<strong class="jxr_keyword">this</strong>.gameName, that.gameName) &amp;&amp;
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>                  Objects.equals(<strong class="jxr_keyword">this</strong>.playerName, that.playerName) &amp;&amp;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>                  Objects.equals(<strong class="jxr_keyword">this</strong>.hostName, that.hostName) &amp;&amp;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>                  Objects.equals(<strong class="jxr_keyword">this</strong>.players, that.players) &amp;&amp;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>                  Objects.equals(<strong class="jxr_keyword">this</strong>.state, that.state);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">return</strong> <span class="jxr_string">"Game["</span> +
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>                  <span class="jxr_string">"gameId="</span> + gameId + <span class="jxr_string">", "</span> +
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>                  <span class="jxr_string">"gameName="</span> + gameName + <span class="jxr_string">", "</span> +
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  <span class="jxr_string">"playerName="</span> + playerName + <span class="jxr_string">", "</span> +
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  <span class="jxr_string">"playerName="</span> + hostName + <span class="jxr_string">", "</span> +
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>                  <span class="jxr_string">"players="</span> + players + <span class="jxr_string">", "</span> +
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>                  <span class="jxr_string">"state="</span> + state + ']';
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
@@ -97,12 +97,12 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">this</strong>.gameName = gameName;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>      }
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> String getPlayerName() {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>          <strong class="jxr_keyword">return</strong> playerName;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> String getHostName() {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          <strong class="jxr_keyword">return</strong> hostName;
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>      }
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setPlayerName(String playerName) {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">this</strong>.playerName = playerName;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setHostName(String hostName) {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">this</strong>.hostName = hostName;
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>      }
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">public</strong> Set&lt;String&gt; getPlayers() {

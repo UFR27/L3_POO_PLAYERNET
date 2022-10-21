@@ -26,7 +26,7 @@ The [Facade](apidocs/fr/pantheonsorbonne/miage/Facade.html) interface allows you
 
 * [Facade instanciation](apidocs/fr/pantheonsorbonne/miage/Facade.html#getFacade()) remember that Facade is a singleton, so whenever you call this method, the same instance will be returned
 * [Facade initialization](apidocs/fr/pantheonsorbonne/miage/Facade.html#waitReady()) blocks until the facade is ready to use (it can take a few seconds)
-* [Player Intialization](apidocs/fr/pantheonsorbonne/miage/Facade.html#createNewPlayer(java.lang.String)) set a name the the player. The Host also have a name.
+* [Player Intialization](apidocs/fr/pantheonsorbonne/miage/Facade.html#createNewPlayer\(java.lang.String)) set a name the the player. The Host also have a name.
 
 
 ## Player Facade
@@ -35,9 +35,9 @@ The [Facade](apidocs/fr/pantheonsorbonne/miage/Facade.html) interface allows you
 
 The [player facade](apidocs/fr/pantheonsorbonne/miage/PlayerFacade.html) can be used for the following usecase:
 
-* [joinning](apidocs/fr/pantheonsorbonne/miage/PlayerFacade.html#autoJoinGame(java.lang.String)) a game
-* [sending](apidocs/fr/pantheonsorbonne/miage/PlayerFacade.html#sendGameCommand(fr.pantheonsorbonne.miage.model.Game,fr.pantheonsorbonne.miage.model.GameCommand)) game commands
-* [receiving](apidocs/fr/pantheonsorbonne/miage/PlayerFacade.html#sendGameCommand(fr.pantheonsorbonne.miage.model.Game,fr.pantheonsorbonne.miage.model.GameCommand)) game commands
+* [joinning](apidocs/fr/pantheonsorbonne/miage/PlayerFacade.html#autoJoinGame\(java.lang.String)) a game
+* [sending](apidocs/fr/pantheonsorbonne/miage/PlayerFacade.html#sendGameCommand\(fr.pantheonsorbonne.miage.model.Game,fr.pantheonsorbonne.miage.model.GameCommand)) game commands
+* [receiving](apidocs/fr/pantheonsorbonne/miage/PlayerFacade.html#sendGameCommand\(fr.pantheonsorbonne.miage.model.Game,fr.pantheonsorbonne.miage.model.GameCommand)) game commands
 
 ### Examples:
 
@@ -62,8 +62,8 @@ The [host facade](apidocs/fr/pantheonsorbonne/miage/HostFacade.html) can be used
 
 ### Usecase
 
-* [creating](apidocs/fr/pantheonsorbonne/miage/HostFacade.html#createNewGame(java.lang.String)) the game
-* [waiting](apidocs/fr/pantheonsorbonne/miage/HostFacade.html#waitForPlayerCount(int)) for players to join the game
+* [creating](apidocs/fr/pantheonsorbonne/miage/HostFacade.html#createNewGame\(java.lang.String)) the game
+* [waiting](apidocs/fr/pantheonsorbonne/miage/HostFacade.html#waitForPlayerCount\(int)) for players to join the game
 
 ### Examples:
 

@@ -20,5 +20,5 @@ public interface HostFacade extends Facade {
      *
      * @param i the minimum amount of player to join the game
      */
-    void waitForPlayerCount(int i);
+    void waitForExtraPlayerCount(int i);
 }

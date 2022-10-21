@@ -164,7 +164,7 @@ public class FacadeImpl extends Main implements InternalFacadePlumbing, Facade, 
     }
 
     @Override
-    public int getPlayerCount() {
+    synchronized public int getPlayerCount() {
         return this.getCurrentGame().players().size() + 1;
     }
 
@@ -185,6 +185,13 @@ public class FacadeImpl extends Main implements InternalFacadePlumbing, Facade, 
         this.playerName = playerName;
         this.sendLobbyStatus(playerName + " joined the lobby");
         LOGGER.debug("join lobby message sent");
+    }
+
+    @Override
+    public void sendGameCommandToPlayer(Game game, String playerName, GameCommand command) {
+        Map<String, String> customParams = new HashMap<>(command.params());
+        customParams.put("playerId", playerName);
+        this.sendGameCommandToAll(game, new GameCommand(command.name(), command.body(), customParams));
     }
 
     @Override
@@ -213,8 +220,8 @@ public class FacadeImpl extends Main implements InternalFacadePlumbing, Facade, 
     }
 
     @Override
-    public void waitForPlayerCount(int i) {
-        while (this.getPlayerCount() < i) {
+    public void waitForExtraPlayerCount(int i) {
+        while (this.getPlayerCount() +1 < i) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -229,32 +236,40 @@ public class FacadeImpl extends Main implements InternalFacadePlumbing, Facade, 
 
     @Override
     public GameCommand receiveGameCommand(Game game) {
+        while (true) {
+            String command = this.receiveRawGameCommand(game);
 
-        String command = this.receiveRawGameCommand(game);
-        int nameIndex = command.indexOf(":");
-        String commandName = command.substring(0, nameIndex);
-        int paramIndex = command.indexOf("?");
-        Map<String, String> params = Collections.EMPTY_MAP;
-        String commandBody = "";
-        if (paramIndex != -1) {
-            params = new HashMap<>();
-            String paramsStr = commandName.substring(paramIndex, command.length());
-            for (String entry : paramsStr.split("&")) {
-                String[] kv = entry.split("=");
-                params.put(kv[0], kv[1]);
+            int nameIndex = command.indexOf(":");
+            String commandName = command.substring(0, nameIndex);
+            int paramIndex = command.indexOf("?");
+            Map<String, String> params = Collections.EMPTY_MAP;
+            String commandBody = "";
+            if (paramIndex != -1) {
+                params = new HashMap<>();
+                String paramsStr = command.substring(paramIndex + 1);
+                for (String entry : paramsStr.split("&")) {
+                    String[] kv = entry.split("=");
+                    params.put(kv[0], kv[1]);
+                }
+                commandBody = command.substring(nameIndex + 1, paramIndex);
+            } else {
+                commandBody = command.substring(nameIndex + 1);
             }
-            commandBody = command.substring(nameIndex, paramIndex);
-        } else {
-            commandBody = command.substring(nameIndex + 1);
-        }
+            if (!params.containsKey("playerId") || params.get("playerId").equals(this.playerName)) {
+                return new GameCommand(commandName, commandBody, params);
+            } else {
+                //this message is not for me and not for all
+                continue;
+            }
 
-        return new GameCommand(commandName, commandBody, params);
+
+        }
 
 
     }
 
     @Override
-    public void sendGameCommand(Game game, GameCommand command) {
+    public void sendGameCommandToAll(Game game, GameCommand command) {
         String params = command.params().entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining("&"));
         if (params.isEmpty()) {
             this.rawSendGameCommand(game, command.name() + ":" + command.body());
@@ -311,8 +326,9 @@ public class FacadeImpl extends Main implements InternalFacadePlumbing, Facade, 
     public void onLobbyReceiveGame(@Body Game game) throws InterruptedException {
         LOGGER.debug("lobbyReceiveGame");
         if (this.getCurrentGame() != null && game.gameId().equals(this.getCurrentGame().gameId())) {
-            this.setCurrentGame(game);
-            this.lobbyGame.put(this.getCurrentGame().gameId(), game);
+            this.getCurrentGame().getPlayers().addAll(game.getPlayers());
+            this.getCurrentGame().setState(game.getState());
+
         } else {
             this.lobbyGame.put(game.gameId(), game);
         }

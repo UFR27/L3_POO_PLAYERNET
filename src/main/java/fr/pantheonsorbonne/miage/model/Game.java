@@ -11,14 +11,14 @@ import java.util.Set;
 public final class Game {
     private String gameId;
     private String gameName;
-    private String playerName;
+    private String hostName;
     private Set<String> players;
     private GameState state;
 
-    public Game(String gameId, String gameName, String playerName, HashSet<String> players, GameState state) {
+    public Game(String gameId, String gameName, String hostName, HashSet<String> players, GameState state) {
         this.gameId = gameId;
         this.gameName = gameName;
-        this.playerName = playerName;
+        this.hostName = hostName;
         this.players = players;
         this.state = state;
     }
@@ -35,7 +35,7 @@ public final class Game {
     }
 
     public String playerName() {
-        return playerName;
+        return hostName;
     }
 
     public Set<String> players() {
@@ -48,7 +48,7 @@ public final class Game {
 
     @Override
     public int hashCode() {
-        return Objects.hash(gameId, gameName, playerName, players, state);
+        return Objects.hash(gameId, gameName, hostName, players, state);
     }
 
     @Override
@@ -58,7 +58,7 @@ public final class Game {
         var that = (Game) obj;
         return Objects.equals(this.gameId, that.gameId) &&
                 Objects.equals(this.gameName, that.gameName) &&
-                Objects.equals(this.playerName, that.playerName) &&
+                Objects.equals(this.hostName, that.hostName) &&
                 Objects.equals(this.players, that.players) &&
                 Objects.equals(this.state, that.state);
     }
@@ -68,7 +68,7 @@ public final class Game {
         return "Game[" +
                 "gameId=" + gameId + ", " +
                 "gameName=" + gameName + ", " +
-                "playerName=" + playerName + ", " +
+                "playerName=" + hostName + ", " +
                 "players=" + players + ", " +
                 "state=" + state + ']';
     }
@@ -89,12 +89,12 @@ public final class Game {
         this.gameName = gameName;
     }
 
-    public String getPlayerName() {
-        return playerName;
+    public String getHostName() {
+        return hostName;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
     }
 
     public Set<String> getPlayers() {

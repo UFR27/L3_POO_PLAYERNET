@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fr.pantheonsorbonne.miage"},{"l":"fr.pantheonsorbonne.miage.camel"},{"l":"fr.pantheonsorbonne.miage.exception"},{"l":"fr.pantheonsorbonne.miage.model"}];updateSearchResults();

@@ -1,0 +1,73 @@
+# Maven Dependencies
+
+On this page, you can find the instructions on how to use ${project.name} to support multiplayer games.
+
+## External repositories
+
+Add the following repositories to your pom.xml to be able to download the artifact:
+
+```xml
+    <repositories>
+        <repository>
+            <id>reposilite-repository-snapshots</id>
+            <name>MIAGE.DEV maven repository snapshots</name>
+            <url>https://maven.miage.dev/snapshots</url>
+        </repository>
+
+        <repository>
+            <id>reposilite-repository-release</id>
+            <name>MIAGE.DEV maven repository releases</name>
+            <url>https://maven.miage.dev/releases</url>
+        </repository>
+    </repositories>
+```
+
+## Library dependency
+
+Add the following snippet to your pom.xml to include the dependency 
+
+```xml
+<dependency>
+    <groupId>fr.pantheonsorbonne.miage</groupId>
+    <artifactId>poo-player</artifactId>
+    <version>${project.version}</version>
+</dependency>
+```
+
+## All included example
+
+```xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+...
+    <dependencies>
+...
+        <dependency>
+            <groupId>fr.pantheonsorbonne.miage</groupId>
+            <artifactId>poo-player</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+...
+    </dependencies>
+
+...
+
+
+    <repositories>
+        <repository>
+            <id>reposilite-repository-snapshots</id>
+            <name>MIAGE.DEV maven repository snapshots</name>
+            <url>https://maven.miage.dev/snapshots</url>
+        </repository>
+
+        <repository>
+            <id>reposilite-repository-release</id>
+            <name>MIAGE.DEV maven repository releases</name>
+            <url>https://maven.miage.dev/releases</url>
+        </repository>
+    </repositories>
+</project>
+```

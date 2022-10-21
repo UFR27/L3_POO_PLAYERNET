@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xmlns="http://maven.apache.org/DECORATION/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 https://maven.apache.org/xsd/decoration-1.8.0.xsd"
+         name="Maven">
+    <bannerLeft>
+        <name>MIAGE L3 POO Multiplayer Network Game</name>
+        <src>https://miage.pantheonsorbonne.fr/sites/default/files/inline-images/logop1miage_1_0.png</src>
+        <href>https://miage.pantheonsorbonne.fr/</href>
+    </bannerLeft>
+
+
+    <body>
+        <links>
+            <item name="EPI" href="https://cours.univ-paris1.fr/course/view.php?id=29083" />
+        </links>
+
+        <menu name="MuNetGame">
+            <item name="configuration" href="configuration.html"></item>
+            <item name="Download" href="download.html"/>
+            <item name="Usage Example" href="usage.html"/>
+            <item name="Project Example" href="https://github.com/UFR27/L3_POO_TICTACTOE"></item>
+
+        </menu>
+
+        <menu ref="reports"/>
+
+    </body>
+</project>

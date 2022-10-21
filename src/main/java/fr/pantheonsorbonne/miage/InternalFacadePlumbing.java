@@ -4,9 +4,11 @@ import fr.pantheonsorbonne.miage.model.Game;
 
 import java.util.Collection;
 
-public interface PlayerFacadePlumbing {
-
-
+/**
+ * This is more advanced interface to used for advanced game management.
+ * Students are not expected to use this interface for their assignements
+ */
+public interface InternalFacadePlumbing {
 
 
     void startGame(Game game);
@@ -27,6 +29,12 @@ public interface PlayerFacadePlumbing {
     void waitGameStarted(Game game);
 
     int getPlayerCount();
+
+    Collection<String> receiveLobbyMessages();
+
+    Collection<String> receiveLobbyStatus();
+
+    Collection<Game> getAvailableGamesInLobby();
 
 
 }

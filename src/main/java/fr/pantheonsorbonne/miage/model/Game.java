@@ -4,6 +4,10 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * This class represents a game in the multiplayer environment.
+ * Game instances should be retreived from the facade and send back to the facade for interacting with a specific game
+ */
 public final class Game {
     private String gameId;
     private String gameName;

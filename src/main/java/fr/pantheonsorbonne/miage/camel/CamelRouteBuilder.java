@@ -17,7 +17,7 @@
 package fr.pantheonsorbonne.miage.camel;
 
 import fr.pantheonsorbonne.miage.model.Game;
-import fr.pantheonsorbonne.miage.PlayerFacadeImpl;
+import fr.pantheonsorbonne.miage.FacadeImpl;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.LoggingLevel;
@@ -37,40 +37,40 @@ public class CamelRouteBuilder extends RouteBuilder {
 
         //void joinLobby(String playerName);
         from(TOPIC_MESSAGE)
-                .bean(PlayerFacadeImpl.getSingleton(), "onLobbyReceiveMessage")
+                .bean(FacadeImpl.getSingleton(), "onLobbyReceiveMessage")
                 .end();
 
         from(TOPIC_GAME_ANOUNCEMENTS)
 
                 .log("received game ${body} of type ${header.type}")
                 .unmarshal().json(Game.class)
-                .bean(PlayerFacadeImpl.getSingleton(), "onLobbyReceiveGame")
+                .bean(FacadeImpl.getSingleton(), "onLobbyReceiveGame")
                 .end();
         from(TOPIC_GAME_JOINING).
                 log("User ${body} is joining game ${header.gameId}")
                 .filter(new Predicate() {
                     @Override
                     public boolean matches(Exchange exchange) {
-                        return exchange.getMessage().getHeader("gameId").equals(PlayerFacadeImpl.getSingleton().getCurrentGame().gameId());
+                        return exchange.getMessage().getHeader("gameId").equals(FacadeImpl.getSingleton().getCurrentGame().gameId());
                     }
                 })
-                .bean(PlayerFacadeImpl.getSingleton(), "onGameJoining")
+                .bean(FacadeImpl.getSingleton(), "onGameJoining")
         ;
 
         from(TOPIC_STATUS)
-                .bean(PlayerFacadeImpl.getSingleton(), "onLobbyReceiveStatus")
+                .bean(FacadeImpl.getSingleton(), "onLobbyReceiveStatus")
                 .end();
 
         from(TOPIC_GAME_COMMAND)
                 .filter(new Predicate() {
                     @Override
                     public boolean matches(Exchange exchange) {
-                        return PlayerFacadeImpl.getSingleton().getCurrentGame() != null
-                                && exchange.getMessage().getHeader("gameId").equals(PlayerFacadeImpl.getSingleton().getCurrentGame().gameId())
-                                && !exchange.getMessage().getHeader("sender").equals(PlayerFacadeImpl.getSingleton().getPlayerName());
+                        return FacadeImpl.getSingleton().getCurrentGame() != null
+                                && exchange.getMessage().getHeader("gameId").equals(FacadeImpl.getSingleton().getCurrentGame().gameId())
+                                && !exchange.getMessage().getHeader("sender").equals(FacadeImpl.getSingleton().getPlayerName());
                     }
                 })
-                .bean(PlayerFacadeImpl.getSingleton(), "onGameCommandReceived")
+                .bean(FacadeImpl.getSingleton(), "onGameCommandReceived")
                 .end();
 
 

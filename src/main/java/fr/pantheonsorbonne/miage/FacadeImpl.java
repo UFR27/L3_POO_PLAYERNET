@@ -16,15 +16,17 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+/**
+ * This is the internal implementation of the facade, students should not use it directly for their assigment
+ */
+public class FacadeImpl extends Main implements InternalFacadePlumbing, Facade, HostFacade, PlayerFacade {
 
-public class PlayerFacadeImpl extends Main implements PlayerFacadePlumbing, PlayerFacadePorcelain {
+    private final static Logger LOGGER = LoggerFactory.getLogger(FacadeImpl.class);
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(PlayerFacadeImpl.class);
-
-    private static final PlayerFacadeImpl PLAYER_FACADE;
+    private static final FacadeImpl PLAYER_FACADE;
 
     static {
-        PLAYER_FACADE = new PlayerFacadeImpl();
+        PLAYER_FACADE = new FacadeImpl();
         try {
             new Thread(() -> {
                 try {
@@ -53,11 +55,11 @@ public class PlayerFacadeImpl extends Main implements PlayerFacadePlumbing, Play
     private String playerName;
     private Game currentGame;
 
-    private PlayerFacadeImpl() {
-        super(PlayerFacadePorcelain.class);
+    private FacadeImpl() {
+        super(Facade.class);
     }
 
-    public static PlayerFacadeImpl getSingleton() {
+    public static FacadeImpl getSingleton() {
 
         return PLAYER_FACADE;
 
@@ -74,12 +76,6 @@ public class PlayerFacadeImpl extends Main implements PlayerFacadePlumbing, Play
 
     }
 
-    @Override
-    public void leaveLobby() {
-
-    }
-
-    @Override
     public void sendLobbyMessage(String text) {
         LOGGER.debug("send lobby message " + text);
         var exchange = ExchangeBuilder.anExchange(this.camelContext).withPattern(ExchangePattern.InOnly).withHeader("type", "lobbyMessage").withBody(text).build();
@@ -332,7 +328,7 @@ public class PlayerFacadeImpl extends Main implements PlayerFacadePlumbing, Play
     public void onGameCommandReceived(@Body String command) throws InterruptedException {
 
         gameCommands.offerLast(command);
-        LOGGER.info("received command " + command );
+        LOGGER.info("received command " + command);
     }
 
 

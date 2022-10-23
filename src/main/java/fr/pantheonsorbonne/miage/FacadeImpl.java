@@ -221,7 +221,7 @@ public class FacadeImpl extends Main implements InternalFacadePlumbing, Facade, 
 
     @Override
     public void waitForExtraPlayerCount(int i) {
-        while (this.getPlayerCount() +1 < i) {
+        while (this.getPlayerCount()  < i) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

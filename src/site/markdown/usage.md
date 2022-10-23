@@ -17,9 +17,9 @@ They should be created and receive whenever a player needs to exchange data with
 
 A game command has a:
 
-* [name](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2Fmodel%2FGameCommand.html%23name%28%29) which describe the type of command sent/received, this is a String
-* [body](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2Fmodel%2FGameCommand.html%23body%28%29) which contains the data to be exchanged, this is also a String
-* [params](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2Fmodel%2FGameCommand.html%23params%28%29) which contains metadata that comes with the command (key-value forms)
+* name which describe the type of command sent/received, this is a String
+* body which contains the data to be exchanged, this is also a String
+* params which contains metadata that comes with the command (key-value forms)
 
 
 # Game Protocol
@@ -46,7 +46,7 @@ The [Facade](apidocs/fr/pantheonsorbonne/miage/Facade.html) interface allows you
 
 * [Facade instanciation](apidocs/fr/pantheonsorbonne/miage/Facade.html#getFacade()) remember that Facade is a singleton, so whenever you call this method, the same instance will be returned
 * [Facade initialization](apidocs/fr/pantheonsorbonne/miage/Facade.html#waitReady()) blocks until the facade is ready to use (it can take a few seconds)
-* [Player Intialization](apidocs/fr/pantheonsorbonne/miage/Facade.html#createNewPlayer\(java.lang.String)) set a name the the player. The Host also have a name.
+* [Player Intialization](apidocs/fr/pantheonsorbonne/miage/Facade.html#createNewPlayer(java.lang.String)) set a name the the player. The Host also have a name.
 
 
 ## Player Facade
@@ -55,10 +55,10 @@ The [Facade](apidocs/fr/pantheonsorbonne/miage/Facade.html) interface allows you
 
 The [player facade](apidocs/fr/pantheonsorbonne/miage/PlayerFacade.html) can be used for the following usecase:
 
-* [joinning a game](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2FPlayerFacade.html%23autoJoinGame%28java.lang.String%29)
-* [sending commands to all players](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2FFacade.html%23sendGameCommandToAll%28fr.pantheonsorbonne.miage.model.Game%2Cfr.pantheonsorbonne.miage.model.GameCommand%29)
-* [sending commands to a specific player](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2FFacade.html%23sendGameCommandToPlayer%28fr.pantheonsorbonne.miage.model.Game%2Cjava.lang.String%2Cfr.pantheonsorbonne.miage.model.GameCommand%29) game commands
-* [receiving a command](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2FFacade.html%23receiveGameCommand%28fr.pantheonsorbonne.miage.model.Game%29)
+* joinning a game
+* sending commands to all players
+* sending commands to a specific player
+* receiving a command
 
 ### Examples:
 
@@ -83,11 +83,11 @@ The [host facade](apidocs/fr/pantheonsorbonne/miage/HostFacade.html) can be used
 
 ### Usecase
 
-* [creating](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2FHostFacade.html%23createNewGame%5C%28java.lang.String%29) the game
-* [waiting](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2FHostFacade.html%23waitForPlayerCount%5C%28int%29) for players to join the game
-* [sending commands to all players](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2FFacade.html%23sendGameCommandToAll%28fr.pantheonsorbonne.miage.model.Game%2Cfr.pantheonsorbonne.miage.model.GameCommand%29)
-* [sending commands to a specific player](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2FFacade.html%23sendGameCommandToPlayer%28fr.pantheonsorbonne.miage.model.Game%2Cjava.lang.String%2Cfr.pantheonsorbonne.miage.model.GameCommand%29) game commands
-* [receiving a command](apidocs%2Ffr%2Fpantheonsorbonne%2Fmiage%2FFacade.html%23receiveGameCommand%28fr.pantheonsorbonne.miage.model.Game%29)
+* creating the game
+* waiting for players to join the game
+* sending commands to all players
+* sending commands to a specific player game commands
+* receiving a command
 
 ### Examples:
 

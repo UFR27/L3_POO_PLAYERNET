@@ -1,9 +1,9 @@
 package monopoly.elements;
 
 public class Player {
-    String name;
-    int money;
-    int position;    
+    private String name;
+    private int money;
+    private int position;    
 
     public Player(String name, int money, int position){
         this.name = name;
@@ -11,6 +11,15 @@ public class Player {
         this.position = position;
     }
     
+    public int getPosition(){
+        return this.position;
+    }
+
+    public void setPosition(int diceResult){
+        this.position += diceResult;
+        // if positon >  taille du plateau
+    }
+
     public void updateBalance(int amount){
         //mise a jour de l'argent
     }
@@ -25,6 +34,10 @@ public class Player {
 
     public void turn(Player p){
         //pass the turn to the next person 
+    }
+
+    public void buyHouse(){
+
     }
 
 }

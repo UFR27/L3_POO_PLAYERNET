@@ -1,9 +1,13 @@
 package monopoly.elements;
 
+import java.util.ArrayList;
+
 public class Player {
     private String name;
     private int money;
-    private int position;    
+    private int position;   
+    private int prisonDuration; 
+    private ArrayList<SpaceCity> property = new ArrayList<>();
 
     public Player(String name, int money, int position){
         this.name = name;
@@ -17,27 +21,38 @@ public class Player {
 
     public void setPosition(int diceResult){
         this.position += diceResult;
-        // if positon >  taille du plateau
+        if (this.position > 38){
+            this.position -= 38;
+        }
     }
 
     public void updateBalance(int amount){
-        //mise a jour de l'argent
+        money = money + amount;
     }
 
-    public void updatePosition(){
-        //
-    }    
+    public int getAsset(){ //game over condtion : asset < 0
+        int asset = 0;
+        int nbBuildings = 0;
+        for(SpaceCity s : property ){
+            nbBuildings = s.getNbBuilding();
+            asset += s.getColor().housePrice*nbBuildings + s.getLandPrice() + money;
+        }
+        return asset;
+    }
 
     public int checkBalance(){
         return money;
     }
 
-    public void turn(Player p){
-        //pass the turn to the next person 
-    }
-
     public void buyHouse(){
-
+        
     }
+
+    public void buyLand(SpaceCity s){
+        
+        property.add(s);
+    }
+
+
 
 }
